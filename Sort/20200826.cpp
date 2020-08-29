@@ -49,8 +49,57 @@ void ShellSort(int array[], int size) {
 	}
 }
 // 3.选择排序 --- 有序放到前面，临时变量记录无序中最小数的下标，将其值与无序中第一个数交换（最小的记录下，比完交换）；
+void SelectSort(int array[], int size){
+	for(int i = 0; i < size - 1; ++i){
+		int save = i;
+		for(int j = i + 1; j < size; ++j){
+			if(array[j] < array[save]){
+				save = j;
+			}
+		}
+		Swap(array, i, save);
+	}
+}
+// 4.堆排序 --- 排升序要建大堆，排降序建小堆；
+void AdjustDown(int array[], int size, int rootIdx) {
+	int leftIdx = 2 * rootIdx + 1;
+	int rightIdx = 2 * rootIdx + 2;
+	if (leftIdx >= size) {
+		return;
+	}
+	int maxIdx = leftIdx;
+	if (rightIdx < size && array[rightIdx] > array[leftIdx]) {
+		maxIdx = rightIdx;
+	}
+	if (array[rootIdx] >= array[maxIdx]) {
+		return;
+	}
+	Swap(array, maxIdx, rootIdx);
+	AdjustDown(array, size, maxIdx);
+}
+void HeapSort(int array[], int size){
+	for(int i = (size - 2) / 2; i >= 0; --i){
+		AdjustDown(array, size - 1, i);
+	}
+	for (int i = 0; i < size; ++i) {
+		Swap(array, 0, size - 1 - i);
+		AdjustDown(array, size - 1 - i, 0);
+	}
+}
+// 5.冒泡排序 --- 有序放到后面,搬西瓜原理，将无序中最大的往后放（有大的就交换，往后冒泡）；
+void BubbleSort(int array[], int size){
+	for(int i = 0; i < size; ++i){
+		for(int j = 0; j < size - 1 - i; ++j){
+			if(array[j] > array[j + 1]){
+				Swap(array, j, j + 1);
+			}
+		}
+	}
+}
+// 6.快速排序 --- 
 
-// 5.冒泡排序 --- 有序放到后面,搬西瓜原理，将无序中最大的往后放（有大的就交换，往后冒泡）;
+// 7.归并排序 --- 
+
 
 // 写个测试函数
 void Test() {
@@ -61,8 +110,9 @@ void Test() {
 	//printf("\n排序过程：\n");
 
 	//InsertSort(array, size);
-    ShellSort(array, size);
+    //ShellSort(array, size);
 	//SelectSort(array, size);
+	//HeapSort(array, size);
 	//BubbleSort(array, size);
 
 	printf("排序后数组：\n");

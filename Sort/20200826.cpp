@@ -96,8 +96,29 @@ void BubbleSort(int array[], int size){
 		}
 	}
 }
-// 6.快速排序 --- 
-
+// 6.快速排序 --- 三大步：选基准值，做分割，分治算法；
+int Partition(int array[], int low, int high){
+	int pivot = array[low];
+	while(low < high){
+		while(low < high && array[high] >= pivot){
+			--high;
+		}
+		array[low] = array[high];
+		while(low < high && array[low] <= pivot){
+			++low;
+		}
+		array[high] = array[low];
+	}
+	array[low] = pivot;
+	return low;
+}
+void QuickSort(int array[], int low, int high){
+	if(low < high){
+		int pivotIdx = Partition(array, low, high);
+		QuickSort(array, low, pivotIdx - 1);
+		QuickSort(array, pivotIdx + 1, high);
+	}
+}
 // 7.归并排序 --- 
 
 
@@ -114,6 +135,7 @@ void Test() {
 	//SelectSort(array, size);
 	//HeapSort(array, size);
 	//BubbleSort(array, size);
+	QuickSort(array, 0, size - 1);
 
 	printf("排序后数组：\n");
 	PrintArray(array, size);

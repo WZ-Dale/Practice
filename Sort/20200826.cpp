@@ -1,11 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
+#include <algorithm>
+
+using namespace std;
 
 // 先写一个交换函数
 void Swap(int array[], int a, int b){
 	int t = array[a];
 	array[a] = array[b];
 	array[b] = t;
+	// swap(array[a], array[b]);
 }
 // 再写一个打印函数
 void PrintArray(int array[], int size) {
@@ -60,7 +64,7 @@ void SelectSort(int array[], int size){
 		Swap(array, i, save);
 	}
 }
-// 4.堆排序 --- 排升序要建大堆，排降序建小堆；
+// 4.堆排序 --- 排升序要建大堆，排降序建小堆，向下调整很关键；
 void AdjustDown(int array[], int size, int rootIdx) {
 	int leftIdx = 2 * rootIdx + 1;
 	int rightIdx = 2 * rootIdx + 2;
@@ -119,8 +123,36 @@ void QuickSort(int array[], int low, int high){
 		QuickSort(array, pivotIdx + 1, high);
 	}
 }
-// 7.归并排序 --- 
-
+// 7.归并排序 --- 平分数组，分治算法（左右分别归并），合并有序数组。
+void Merge(int array[], int low, int mid, int high){
+	int size = high - low + 1;
+	int* a = new int[size];
+	int leftIdx = low;
+	int rightIdx = mid + 1;
+	int i = 0;
+	while(leftIdx <= mid && rightIdx <= high){
+		a[i++] = array[leftIdx] < array[rightIdx] ? array[leftIdx++] : array[rightIdx++];
+	}
+	while(leftIdx <= mid){
+		a[i++] = array[leftIdx++];
+	}
+	while(rightIdx <= high){
+		a[i++] = array[rightIdx++];
+	}
+	for(i = 0; i < size; ++i){
+		array[low + i] = a[i];
+	}
+	delete[] a;
+}
+void MergeSort(int array[], int low, int high){
+	if(low >= high){
+		return;
+	}
+	int mid = (high + low) / 2;
+	MergeSort(array, low, mid);
+	MergeSort(array, mid + 1, high);
+	Merge(array, low, mid, high);
+}
 
 // 写个测试函数
 void Test() {
@@ -135,7 +167,8 @@ void Test() {
 	//SelectSort(array, size);
 	//HeapSort(array, size);
 	//BubbleSort(array, size);
-	QuickSort(array, 0, size - 1);
+	//QuickSort(array, 0, size - 1);
+	MergeSort(array, 0, size - 1);
 
 	printf("排序后数组：\n");
 	PrintArray(array, size);
